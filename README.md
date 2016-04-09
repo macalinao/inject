@@ -1,9 +1,11 @@
 # inject
 --
-    import "github.com/codegangsta/inject"
+    import "github.com/simplyianm/inject"
 
 Package inject provides utilities for mapping and injecting dependencies in
 various ways.
+
+Fork of [codegangsta's inject][codegangsta-inject] since it seems to be unmaintained.
 
 Language Translations:
 * [简体中文](translations/README_zh_cn.md)
@@ -93,3 +95,5 @@ type TypeMapper interface {
 ```
 
 TypeMapper represents an interface for mapping interface{} values based on type.
+
+[codegangsta-inject]: https://github.com/codegangsta/inject
