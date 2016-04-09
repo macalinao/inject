@@ -16,7 +16,7 @@ type Injector interface {
 
 	// ApplyMap applies dependencies to the provided struct and registers it
 	// if it is successful.
-	ApplyMap(interface{}) (TypeMapper, error)
+	ApplyMap(interface{}) (Injector, error)
 
 	// Maps dependencies in the Type map to each field in the struct
 	// that is tagged with 'inject'. Returns an error if the injection
@@ -30,17 +30,17 @@ type Injector interface {
 	Invoke(interface{}) ([]reflect.Value, error)
 
 	// Maps the interface{} value based on its immediate type from reflect.TypeOf.
-	Map(interface{}) TypeMapper
+	Map(interface{}) Injector
 
 	// Maps the interface{} value based on the pointer of an Interface provided.
 	// This is really only useful for mapping a value as an interface, as interfaces
 	// cannot at this time be referenced directly without a pointer.
-	MapTo(interface{}, interface{}) TypeMapper
+	MapTo(interface{}, interface{}) Injector
 
 	// Provides a possibility to directly insert a mapping based on type and value.
 	// This makes it possible to directly map type arguments not possible to instantiate
 	// with reflect like unidirectional channels.
-	Set(reflect.Type, reflect.Value) TypeMapper
+	Set(reflect.Type, reflect.Value) Injector
 
 	// Returns the Value that is mapped to the current type. Returns a zeroed Value if
 	// the Type has not been mapped.
@@ -132,14 +132,14 @@ func (inj *injector) Apply(val interface{}) error {
 }
 
 // Maps the concrete value of val to its dynamic type using reflect.TypeOf,
-// It returns the TypeMapper registered in.
-func (i *injector) Map(val interface{}) TypeMapper {
+// It returns the Injector registered in.
+func (i *injector) Map(val interface{}) Injector {
 	i.values[reflect.TypeOf(val)] = reflect.ValueOf(val)
 	return i
 }
 
 // Applies dependencies to the struct then Maps it if it is successful.
-func (i *injector) ApplyMap(val interface{}) (TypeMapper, error) {
+func (i *injector) ApplyMap(val interface{}) (Injector, error) {
 	err := i.Apply(val)
 	if err != nil {
 		return nil, err
@@ -147,14 +147,14 @@ func (i *injector) ApplyMap(val interface{}) (TypeMapper, error) {
 	return i.Map(val), nil
 }
 
-func (i *injector) MapTo(val interface{}, ifacePtr interface{}) TypeMapper {
+func (i *injector) MapTo(val interface{}, ifacePtr interface{}) Injector {
 	i.values[InterfaceOf(ifacePtr)] = reflect.ValueOf(val)
 	return i
 }
 
 // Maps the given reflect.Type to the given reflect.Value and returns
 // the Typemapper the mapping has been registered in.
-func (i *injector) Set(typ reflect.Type, val reflect.Value) TypeMapper {
+func (i *injector) Set(typ reflect.Type, val reflect.Value) Injector {
 	i.values[typ] = val
 	return i
 }

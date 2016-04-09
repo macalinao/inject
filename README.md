@@ -1,5 +1,5 @@
 # inject
---
+
     import "github.com/simplyianm/inject"
 
 Package inject provides utilities for mapping and injecting dependencies in
