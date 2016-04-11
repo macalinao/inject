@@ -1,6 +1,6 @@
 // Package inject provides utilities for mapping and injecting dependencies.
 //
-// Fork of [codegangsta's inject][https://github.com/codegangsta/inject]
+// Fork of [codegangsta's inject](https://github.com/codegangsta/inject)
 // since it seems to be unmaintained.
 package inject
 
